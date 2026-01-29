@@ -13,8 +13,12 @@ from datetime import datetime
 import re
 import atexit
 import inspect
+import configparser
 
-global_dll_path = Path("D:\\software\\new_tdx64\\PYPlugins\\TPythClient.dll")
+config = configparser.ConfigParser()
+config.read('config.cfg', encoding='utf-8')
+dll_path = config.get('Config', 'dll_path')
+global_dll_path = Path(dll_path)
 dll = ctypes.CDLL(str(global_dll_path))
 
 # 设置DLL函数的返回类型

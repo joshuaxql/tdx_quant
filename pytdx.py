@@ -59,5 +59,5 @@ def financial(symbol: list[str], start_date: str, end_date: str, report_type: st
     return fd
 
 if __name__ == '__main__':
-    data = daily([])
+    data = financial(symbol=["000001.SZ", "600000.SH"], start_date='20250101', end_date='20251010', report_type='announce_time', field=['Fn193','Fn194','Fn195','Fn196','Fn197'])
     print(data)
