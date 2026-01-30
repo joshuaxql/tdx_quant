@@ -44,9 +44,16 @@ def daily(symbol: list[str], start_date: str="2025-01-01", end_date: str="", adj
         df_list
     )
     final_df = final_df.set_index('date')  # 行索引设为日期
-    col_order = ['symbol', 'Open', 'High', 'Low', 'Close', 'Volume', 'Amount']
-    final_df = final_df[col_order]
-    final_df.rename(columns={'Open':'open', 'High':'high', 'Low':'low', 'Close':'close', 'Volume':'volume', 'Amount':'amount'}, inplace=True)
+    if adjust == ADJUST_PREV or adjust == ADJUST_POST:
+        col_order = ['symbol', 'Open', 'High', 'Low', 'Close', 'Volume', 'Amount']
+        final_df = final_df[col_order]
+        final_df.rename(columns={'Open':'open', 'High':'high', 'Low':'low', 'Close':'close', 'Volume':'volume',
+                                 'Amount':'amount'}, inplace=True)
+    else:
+        col_order = ['symbol', 'Open', 'High', 'Low', 'Close', 'Volume', 'Amount', 'ForwardFactor']
+        final_df = final_df[col_order]
+        final_df.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume',
+                                 'Amount': 'amount', 'ForwardFactor':'adj'}, inplace=True)
     return final_df.dropna()
 
 def financial(symbol: list[str], start_date: str, end_date: str, report_type: str, field: list[str])->dict:
@@ -59,5 +66,5 @@ def financial(symbol: list[str], start_date: str, end_date: str, report_type: st
     return fd
 
 if __name__ == '__main__':
-    data = financial(symbol=["000001.SZ", "600000.SH"], start_date='20250101', end_date='20251010', report_type='announce_time', field=['Fn193','Fn194','Fn195','Fn196','Fn197'])
+    data = daily(symbol=["000001.SZ"], adjust=ADJUST_NONE)[["close", "adj"]]
     print(data)
